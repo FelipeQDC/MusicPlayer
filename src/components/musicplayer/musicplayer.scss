@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap');
+
+.flex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    .card{
+        width: 30dvw;
+        aspect-ratio: 1 / 1;
+        min-width: 20em;
+        min-height: 20em;
+        border-radius: 16px;
+        backdrop-filter: blur(7.1px);
+        -webkit-backdrop-filter: blur(7.1px);
+        background: linear-gradient(145deg, #dcf7d9, #b9d0b78e);
+        box-shadow:  50px 50px 100px #84a788af,
+             -50px -50px 100px #41948ebf;
+        user-select: none;  
+        position: relative; 
+        .Menu{
+            display: block;
+            position: absolute;
+            background: rgba(255, 255, 255, 0.616);
+            border-radius: 16px;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 0 0px 16px 16px;
+            width: 100%;
+            bottom: 0;
+            height: 20%;
+            position: absolute;
+            transition: 500ms ease-in-out;
+
+            .Controles{
+                display: flex;
+                justify-content:center;
+                width: 100%;
+                align-items:end;
+                transform: translateY(5dvh);
+                img{
+                    display: inline-flex;
+                    opacity: 0;
+                    aspect-ratio: 1 / 1;
+                    height: 2.2em;
+                    transition: 500ms ease-in-out;  
+                }
+                img:nth-child(1){
+                margin-right: 20%;
+                }
+                img:nth-child(4){
+                    margin-left: 20%;
+                    }
+            }
+
+            .info{
+                font-size: 0.5rem;
+                text-align: center;
+                margin-bottom: 0;
+                font-family: "Nanum Gothic Coding", monospace;
+                font-weight: 400;
+                font-style: normal;
+            }
+        }
+        .fundo{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
+            border-radius: 16px;
+            transition: 500ms ease-in-out;   
+        }  
+        transition: 500ms ease-in-out;   
+    }
+    .card:hover{
+        transform: scale(1.1);
+        .Menu{
+            height: 30%;
+            transform: translateY(0);
+
+            img{
+                opacity: 1;
+            }
+        }
+        .fundo{
+            opacity: 0.8;
+        }
+    }
+}

@@ -1,12 +1,16 @@
 import './musicplayer.scss';
 import { useState } from 'react';
 function Musicplayer(){
-    const [Botao,setBotao] = useState("/botao-play.png") 
+    const [Botao, setBotao] = useState("/botao-play.png") 
+    
+
     const tratarbotao = () => {
         if(Botao == "/botao-play.png")
             setBotao("/botao-de-pausa.png")
+            
         else
             setBotao("/botao-play.png")
+        
     }
 
     

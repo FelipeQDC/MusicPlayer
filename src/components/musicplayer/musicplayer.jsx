@@ -1,7 +1,6 @@
 import './musicplayer.scss';
 import { useState,useRef  } from 'react';
 function Musicplayer(){
-<<<<<<< HEAD
     const [Botao,setBotao] = useState("/botao-play.png") 
     const [ClasseBot1,setClasseBot1] = useState("Nada") 
     const [ClasseBot2,setClasseBot2] = useState("Nada")

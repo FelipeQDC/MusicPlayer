@@ -1,5 +1,5 @@
 import './musicplayer.scss';
-import { useState,useRef  } from 'react';
+import { useState,useRef,useEffect  } from 'react';
 function Musicplayer(){
     const [Botao,setBotao] = useState("/botao-play.png") 
     const [ClasseBot1,setClasseBot1] = useState("Nada") 
@@ -7,9 +7,10 @@ function Musicplayer(){
     const [ClasseBot3,setClasseBot3] = useState("Nada")
     const [ClasseBot4,setClasseBot4] = useState("Nada")
     const [Id,setId] = useState(0)
+    const [Repete,setRepete] = useState(false)
+    const [RepetCSS,setRepetCSS] = useState("Nada")
     const [ progress,setProgress] = useState(0)
     const [ Tocando,setTocando] = useState(false)
-    const Meuprogresso = useRef(null);
     const Musicas = [
         {
             Nome: 'A Song for the Empty World',
@@ -54,26 +55,65 @@ function Musicplayer(){
             duracao:'2:15'
         }
     ]
-    const tratarbotao = () => {
-        if(Botao == "/botao-play.png")
-            setBotao("/botao-de-pausa.png")
-            
-        else
-            setBotao("/botao-play.png")
-        
-    }
+    const audioref =useRef( new Audio(Musicas[Id].Musica));
+    const audio = audioref.current;
+    useEffect(() => {
+        const audio = audioref.current;
+
+        const onTimeUpdate = () => {
+            setProgress((audio.currentTime / audio.duration) * 100);
+        };
+
+        audio.addEventListener('timeupdate', onTimeUpdate);
+
+        const onEnded = () => {
+            prox();
+        };
+
+        audio.addEventListener('ended', onEnded);
+        return () => {
+            audio.removeEventListener('timeupdate', onTimeUpdate);
+            audio.removeEventListener('ended', onEnded);
+        };
+    }, [Id]);
 
     const prox = () => {
-        if(Id == Musicas.length - 1)
+        if(Id == Musicas.length - 1 && Repete)
+        {
             setId(0)
-        else
+            audio.src = Musicas[0].Musica
+            if(Tocando) audio.play()
+            return 1
+        } 
+        if(Id != Musicas.length - 1){
             setId(Id+1)
+            audio.src = Musicas[Id + 1].Musica
+            if(Tocando) audio.play()
+            return 1
+        }
+        if(!Repete && Id == Musicas.length - 1)
+        {
+            audio.pause()
+            return 1
+        }
+        return -1
+      
     }
     const ant = () => {
         if(Id == 0)
+        {
             setId(Musicas.length - 1)
+            audio.src = Musicas[Musicas.length - 1].Musica
+            if(Tocando) audio.play()
+        }
+          
         else
+        {
             setId(Id-1)
+            audio.src = Musicas[Id-1].Musica
+            if(Tocando) audio.play()
+        }
+            
     }
 
     const animabot = (e) =>{
@@ -107,20 +147,37 @@ function Musicplayer(){
         }
     }
 
-    const audioref =useRef( new Audio(Musicas[Id].Musica));
+ 
 
     const togglePlay = () => {
-    const audio = audioref.current;
+    
       if (Tocando) {
         audio.pause();
+        setBotao("/botao-play.png")
       } else {
         audio.play();
-        
+        setBotao("/botao-de-pausa.png")
       }
-      setTocando(false)
+      setTocando(!Tocando)
     };
   
-   
+    const HandleProgresso = (event) => {
+        const audio = audioref.current;
+        const novoProgresso = parseInt(event.target.value);
+        const novaPosicao = (novoProgresso / 100) * audio.duration;
+        audio.currentTime = novaPosicao;
+        setProgress(novoProgresso);
+      };
+
+    const HandleRepeat = () => {
+        if(RepetCSS == 'Nada')
+            setRepetCSS('Selecionado')
+        else
+            setRepetCSS('Nada')
+
+        setRepete(!Repete)
+    }
+
     return(
         <>
         <div className="flex">
@@ -128,7 +185,7 @@ function Musicplayer(){
                 <img src={Musicas[Id].foto} alt="" className='fundo'/>
                 <div className='Menu'>
                     <div className="progresso">
-                        <input type="range" name="Progresso" id="prog" min='0' max='100' ref={Meuprogresso} />
+                        <input type="range" name="Progresso" id="prog" min={0} max={100} step={1} value={progress} onChange={HandleProgresso}/>
                     </div>
                     <div className="info">
                         <h2>{Musicas[Id].Nome}</h2>
@@ -136,14 +193,13 @@ function Musicplayer(){
                     </div>
                     <div className='Controles'>
                         <img className={ClasseBot1} src="/pagina-anterior.png" alt="Musica anterior"  onClick={() => {ant(); animabot(1) }}/>
-                        <img src={Botao} className={ClasseBot2} alt="Tocar/pausar" onClick={() => {tratarbotao();animabot(2);togglePlay()}}/>
-                        <img src="/repeat.png" className={ClasseBot3} alt="Repetir" onClick={() => {animabot(3)}} />
+                        <img src={Botao} className={ClasseBot2} alt="Tocar/pausar" onClick={() => {animabot(2);togglePlay()}}/>
+                        <img src="/repeat.png" className={`${ClasseBot3} ${RepetCSS}`} alt="Repetir" onClick={() => {animabot(3); HandleRepeat(); setRepete(!Repete)}} />
                         <img src="/proxima-pagina.png" className={ClasseBot4} alt="Proxima Musica" onClick={() => { prox(); animabot(4)}}/>
                     </div>
                 </div>
             </div>
         </div>    
-
         </>
     )
 } export default Musicplayer;

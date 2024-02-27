@@ -29,6 +29,7 @@
             width: 100%;
             bottom: 0;
             height: 20%;
+            position: absolute;
             transition: 500ms ease-in-out;
             .Controles{
                 display: flex;
@@ -37,6 +38,11 @@
                 align-items:end;
                 transform: translateY(1vw);
                 transition: 500ms ease-in-out;
+                .Selecionado{
+                    border-radius: 150px;
+                    opacity: 0;
+                    transition: 250ms ease-in-out;  
+                }
                 img{
                     display: inline-flex;
                     opacity: 0;
@@ -45,6 +51,7 @@
                     min-height: 35px;
                     transition: 500ms ease-in-out;  
                     cursor: pointer;
+                    
                 }
                 img:nth-child(1){
                 margin-right: 20%;
@@ -66,8 +73,42 @@
             }
             .progresso{
                 height: 35%;
-                .Player{
-                    color: #80a48c;
+                display: flex;
+                justify-content:center;
+                align-items: center;
+                input[type="range"] {
+                    -webkit-appearance: none;
+                    height: 10%;
+                    appearance: none;
+                    background: transparent;
+                    cursor: pointer;
+                    width: 15vw;
+                    min-width: 15em;
+                    min-height: 0.5em;
+                  }
+                input[type="range"]::-webkit-slider-runnable-track {
+                    background: #053a5f;
+                    height: 0.5rem;
+                }
+ 
+                input[type="range"]::-moz-range-track {
+                    background: #053a5f;
+                    height: 0.5rem;
+                }
+                input[type="range"]::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    margin-top: -12px;
+                    background-color: #5cd5eb;
+                    height: 2rem;
+                    width: 1rem;    
+                 }
+                input[type="range"]::-moz-range-thumb {
+                    border: none; 
+                    border-radius: 0;
+                    background-color: #5cd5eb;
+                    height: 2rem;
+                    width: 1rem;
                 }
             }
         }
@@ -87,6 +128,13 @@
             height: 30%; 
             .Controles{
                 transform: translateY(-0.9vw);
+                .Selecionado{
+                    opacity: 1;
+                    background: #b9d0b78e;
+                    box-shadow:  4px 4px 20px #606c5f,
+                                 -4px -4px 20px #ffffff;
+                     transition: 800ms ease-in-out;
+                }
                 img{
                     opacity: 1;
                 }
@@ -113,7 +161,7 @@
     }
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1500px) {
     .info{
         display: flex;
         justify-content:center;

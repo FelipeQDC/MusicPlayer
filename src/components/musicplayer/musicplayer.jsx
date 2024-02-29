@@ -11,6 +11,7 @@ function Musicplayer(){
     const [RepetCSS,setRepetCSS] = useState("Nada")
     const [ progress,setProgress] = useState(0)
     const [ Tocando,setTocando] = useState(false)
+    const [TempoFormatado, setTempoFormatado] = useState('');
     const Musicas = [
         {
             Nome: 'A Song for the Empty World',
@@ -24,7 +25,7 @@ function Musicplayer(){
             Banda: 'floopy',
             foto: '/cappuccino.jpg',
             Musica: '/cappuccino.mp3',
-            duracao:'4:33'
+            duracao:'2:09'
         },
         {
             Nome: 'care w/ sea.',
@@ -76,6 +77,13 @@ function Musicplayer(){
             audio.removeEventListener('ended', onEnded);
         };
     }, [Id]);
+
+    useEffect(() => {
+        const Minutos = Math.floor(audio.currentTime.toFixed(0) / 60);
+        const Resto = audio.currentTime.toFixed(0) % 60;
+        const Formatado = `${Minutos}:${Resto < 10 ? '0' : ''}${Resto}`;
+        setTempoFormatado(Formatado);
+      }, [audio.currentTime.toFixed(0)]);
 
     const prox = () => {
         if(Id == Musicas.length - 1 && Repete)
@@ -178,6 +186,8 @@ function Musicplayer(){
         setRepete(!Repete)
     }
 
+
+
     return(
         <>
         <div className="flex">
@@ -185,7 +195,9 @@ function Musicplayer(){
                 <img src={Musicas[Id].foto} alt="" className='fundo'/>
                 <div className='Menu'>
                     <div className="progresso">
-                        <input type="range" name="Progresso" id="prog" min={0} max={100} step={1} value={progress} onChange={HandleProgresso}/>
+                      <h3>{TempoFormatado}</h3>  
+                      <input type="range" name="Progresso" id="prog" min={0} max={100} step={0.1} value={progress} onChange={HandleProgresso}/>
+                      <h3>{Musicas[Id].duracao}</h3>
                     </div>
                     <div className="info">
                         <h2>{Musicas[Id].Nome}</h2>
